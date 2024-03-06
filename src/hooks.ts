@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, CSSProperties} from "react";
 
 export interface UseAnimatedScaleProps {
     start : () => void, 
@@ -8,6 +8,13 @@ export interface UseAnimatedScaleProps {
 export interface UseDimensionProps {
     w : number, 
     h : number 
+}
+
+export interface UseStyleProps {
+    parentStyle() : CSSProperties,
+    fixInMiddleStyle(rot : number) : CSSProperties,
+    blockStyle() : CSSProperties, 
+    circleStyle() : CSSProperties 
 }
 
 export const useAnimatedScale = (scGap : number = 0.01, delay : number = 20) : UseAnimatedScaleProps => {
@@ -50,4 +57,48 @@ export const useDimension = () : UseDimensionProps => {
         w, 
         h
     }
+}
+
+const sinify = (scale : number) : number => Math.min(scale * Math.PI)
+
+export const useStyle = (w : number, h : number, scale : number, color : string) : UseStyleProps => {
+    const sf : number = sinify(scale)
+    const size : number = Math.min(w, h) / 10 
+    const position = 'absolute'
+    return {
+        parentStyle() : CSSProperties {
+            return {
+                position
+            }
+        },
+        fixInMiddleStyle(rot : number) : CSSProperties {
+            return {
+                position,
+                left: `${w / 2}px`,
+                top: `${h / 2}px`,
+                transform: `rotate(${rot * sf}deg)`
+            }
+        },
+        blockStyle() : CSSProperties {
+            return {
+                position,
+                top: `${-size}px`,
+                left:"0px",
+                width: `${size}px`,
+                height: `${size}px`,
+                background: color
+            }
+        },
+        circleStyle() : CSSProperties {
+            return {
+                position, 
+                top: `${ -size -h * 0.5 * (1 - sf)}px`,
+                left: `${-size}px`,
+                borderRadius: '50%',
+                width: `${size}px`,
+                height: `${size}px`,
+                background: color
+            }
+        }
+    }    
 }
