@@ -59,7 +59,7 @@ export const useDimension = () : UseDimensionProps => {
     }
 }
 
-const sinify = (scale : number) : number => Math.min(scale * Math.PI)
+const sinify = (scale : number) : number => Math.sin(scale * Math.PI)
 
 export const useStyle = (w : number, h : number, scale : number, color : string) : UseStyleProps => {
     const sf : number = sinify(scale)
@@ -92,7 +92,7 @@ export const useStyle = (w : number, h : number, scale : number, color : string)
         circleStyle() : CSSProperties {
             return {
                 position, 
-                top: `${ -size -h * 0.5 * (1 - sf)}px`,
+                top: `${ -size * 0.9 + (- h / 2) * (1 - sf)}px`,
                 left: `${-size}px`,
                 borderRadius: '50%',
                 width: `${size}px`,
